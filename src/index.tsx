@@ -67,7 +67,7 @@ export default function Command(props: LaunchProps) {
     Number(group) > 0 &&
     Number(group) < 700
   ) {
-    const description = isRunning ? "Click ↵ to stop the timer." : "Click ↵ to start the timer.";
+    const description = isRunning ? "Click ↵ to stop the metronome" : "Click ↵ to start the metronome";
     return (
       <List searchBarPlaceholder="" searchText="">
         <List.EmptyView
