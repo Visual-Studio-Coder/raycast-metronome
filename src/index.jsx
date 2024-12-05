@@ -1,4 +1,4 @@
-import { List, LaunchProps, showToast, Toast, popToRoot, environment, ActionPanel, Action, Icon } from "@raycast/api";
+import { List, showToast, Toast, popToRoot, environment, ActionPanel, Action, Icon } from "@raycast/api";
 import { useEffect, useRef, useState } from "react";
 import sound from "sound-play";
 
@@ -47,8 +47,12 @@ export default function Command(props) {
   }, [bpm, group, isRunning]);
 
   if (
-    Number.isInteger(Number(bpm)) && Number(bpm) > 0 && Number(bpm) < 700 &&
-    Number.isInteger(Number(group)) && Number(group) > 0 && Number(group) < 700
+    Number.isInteger(Number(bpm)) &&
+    Number(bpm) > 0 &&
+    Number(bpm) < 700 &&
+    Number.isInteger(Number(group)) &&
+    Number(group) > 0 &&
+    Number(group) < 700
   ) {
     const description = isRunning ? "Click ↵ to pause" : "Click ↵ to play";
     return (
