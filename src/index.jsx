@@ -2,18 +2,15 @@ import { List, LaunchProps, showToast, Toast, popToRoot, environment, ActionPane
 import { useEffect, useRef, useState } from "react";
 import sound from "sound-play";
 
-export default function Command(props: LaunchProps) {
-  const { bpm, group = 1 } = props.arguments; // Set default value for group
-  const [taps, setTaps] = useState<number>(0);
-  const groupPositionRef = useRef<number>(1);
-  const [isRunning, setIsRunning] = useState(true); // Added state variable for metronome status
+export default function Command(props) {
+  const { bpm, group } = props.arguments;
+  const [taps, setTaps] = useState(0);
+  const groupPositionRef = useRef(1);
+  const [isRunning, setIsRunning] = useState(true);
 
   const handleStartStop = () => {
-    if (isRunning) {
-      stopMetronome();
-    } else {
-      startMetronome();
-    }
+    if (isRunning) stopMetronome();
+    else startMetronome();
   };
 
   const stopMetronome = () => {
@@ -27,50 +24,37 @@ export default function Command(props: LaunchProps) {
   };
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
+    let timer = null;
     const interval = 60000 / Number(bpm);
 
     function handleClick() {
-      if (groupPositionRef.current === 1) {
-        sound.play(environment.assetsPath + "/sfx/" + "metronome-click.wav");
-      } else {
-        sound.play(environment.assetsPath + "/sfx/" + "metronome-click_lower.wav");
-      }
+      const clickSound = groupPositionRef.current === 1 ? "metronome-click.wav" : "metronome-click_lower.wav";
+      const soundPath = `${environment.assetsPath}/sfx/${clickSound}`;
 
-      if (groupPositionRef.current === Number(group)) {
-        groupPositionRef.current = 1;
-      } else {
-        groupPositionRef.current += 1;
-      }
+      sound.play(soundPath).catch((error) => {
+        console.error(`Failed to play sound: ${soundPath}`, error);
+      });
 
+      groupPositionRef.current = groupPositionRef.current === Number(group) ? 1 : groupPositionRef.current + 1;
       setTaps((previousTaps) => previousTaps + 1);
     }
 
-    if (isRunning) {
-      timer = setInterval(handleClick, interval);
-    }
+    if (isRunning) timer = setInterval(handleClick, interval);
 
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      if (timer) clearInterval(timer);
     };
   }, [bpm, group, isRunning]);
 
   if (
-    !isNaN(Number(bpm)) &&
-    Number(bpm) > 0 &&
-    Number(bpm) < 500 &&
-    !isNaN(Number(group) || 1) &&
-    Number(group || 1) > 0 &&
-    Number(group || 1) < 500
+    Number.isInteger(Number(bpm)) && Number(bpm) > 0 && Number(bpm) < 700 &&
+    Number.isInteger(Number(group)) && Number(group) > 0 && Number(group) < 700
   ) {
     const description = isRunning ? "Click ↵ to pause" : "Click ↵ to play";
-
     return (
       <List searchBarPlaceholder="" searchText="">
         <List.EmptyView
-          title={`BPM: ${bpm} | Accents: Per ${group || 1} ${group == 1 ? "Click" : "Clicks"} | Clicks: ${taps}`}
+          title={`BPM: ${bpm} | Accents: Per ${group} Clicks | Clicks: ${taps}`}
           description={description}
           icon={taps % 2 === 0 ? "metronome-left.png" : "metronome-right.png"}
           actions={
@@ -89,7 +73,7 @@ export default function Command(props: LaunchProps) {
     showToast({
       style: Toast.Style.Failure,
       title: "Invalid Inputs",
-      message: "Inputs must be positive numbers below 500",
+      message: "Inputs must be positive integers below 700",
     });
     popToRoot();
     return null;

@@ -33,6 +33,13 @@
       ]
     }
   ],
+  "tools": [
+    {
+      "name": "play-metronome",
+      "title": "Play Metronome",
+      "description": "Start a metronome"
+    }
+  ],
   "dependencies": {
     "@gibme/timer": "^1.0.4",
     "@raycast/api": "^1.57.1",
