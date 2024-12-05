@@ -4,11 +4,7 @@
   "title": "Metronome",
   "description": "Based on an input (integer argument) BPM, you can get a metronome that plays a sound after a certain amount of time.",
   "icon": "command-icon.png",
-<<<<<<< HEAD
-  "author": "Vaibhav-Satishkumar",
-=======
   "author": "Visual-Studio-Coder",
->>>>>>> main
   "categories": [
     "Other",
     "Fun"
@@ -37,16 +33,6 @@
       ]
     }
   ],
-<<<<<<< HEAD
-=======
-  "tools": [
-    {
-      "name": "play-metronome",
-      "title": "Play Metronome",
-      "description": "Start a metronome"
-    }
-  ],
->>>>>>> main
   "dependencies": {
     "@gibme/timer": "^1.0.4",
     "@raycast/api": "^1.57.1",
